@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yin.mapper.UserMapper">
+
+	<resultMap id="BaseResultMap" type="User">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="userName" property="userName" jdbcType="VARCHAR" />
+		<result column="userAge" property="userAge" jdbcType="BIGINT" />
+		<result column="userAddress" property="userAddress" jdbcType="VARCHAR" />
+	</resultMap>
+
+	<sql id="baseColumn">
+		id, userName, userAddress
+	</sql>
+
+	<select id="selectUserByIds3" parameterType="list" resultMap="BaseResultMap">
+		select
+		<include refid="baseColumn" />
+		from user_info
+		<where>
+			<if test="userId != null and userId.size() > 0">
+				and id in
+				<foreach item="item" index="index" collection="userId" open="("
+					separator="," close=")">
+					#{item}
+				</foreach>
+			</if>
+		</where>
+	</select>
+
+	<select id="selectUserByID" parameterType="int" resultType="User">
+		select * from `user_info` where id = #{id}
+	</select>
+
+	<select id="selectUserByIds" parameterType="list">
+		select * from user_info
+		<where>
+			<if test="userId != null and userId.size() > 0">
+				and in
+				<foreach item="item" index="index" collection="userId" open="("
+					separator="," close=")">
+					#{item}
+				</foreach>
+			</if>
+		</where>
+	</select>
+
+	<select id="selectUserByIds2" parameterType="list" resultType="User">
+		select * from user_info
+		<where>
+			<if test="userId != null and userId.size() > 0">
+				and id in
+				<foreach item="item" index="index" collection="userId" open="("
+					separator="," close=")">
+					#{item}
+				</foreach>
+			</if>
+		</where>
+	</select>
+
+	<select id="findAllUser" resultMap="BaseResultMap" resultType="User">
+		select * from user_info
+	</select>
+
+</mapper>
